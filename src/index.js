@@ -1,28 +1,18 @@
-module.exports = function check(str, bracketsConfig) {
-    let open = bracketsConfig.map(item => item[0]);
-    let close = bracketsConfig.map(item => item[1]);
+function check(str, bracketsConfig) {
     let arr = str.split('');
     let stack = [];
-
-    for (let curr of arr) {
-        let bracketIndex = close.findIndex(item => curr === item );
-        if (bracketIndex !== -1) {
-            if (open[bracketIndex] === close[bracketIndex]) {
-                if (open[bracketIndex] === stack[stack.length - 1]) {
-                    stack.pop();
-                } else {
-                    stack.push(curr);
-                }
-                continue;
-            }
-            if (stack[stack.length - 1] !== open[bracketIndex]) {
-                return false;
-            }
+    let second = [];
+    for (let item of arr){
+        if (item === second[1]){
             stack.pop();
+            second = bracketsConfig.find(itemArr => itemArr[0] === stack[stack.length - 1]) || [];
             continue;
         }
-        stack.push(curr);
+        stack.push(item);
+        second = bracketsConfig.find(itemArr => itemArr[0] === stack[stack.length - 1]) || [];
     }
-    return stack.length === 0;
-};
+    return !stack.length;
+}
 
+
+module.exports = check;
